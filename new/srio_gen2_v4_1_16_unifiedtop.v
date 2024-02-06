@@ -113,12 +113,12 @@ module srio_gen2_v4_1_16_unifiedtop #(
     input   [ 7: 0]    s_axis_iotx_tkeep ,
     input   [31: 0]    s_axis_iotx_tuser ,
 
-    input              m_axis_iorx_tvalid,
-    output             m_axis_iorx_tready,
-    input              m_axis_iorx_tlast ,
-    input   [63: 0]    m_axis_iorx_tdata ,
-    input   [ 7: 0]    m_axis_iorx_tkeep ,
-    input   [31: 0]    m_axis_iorx_tuser ,
+    output             m_axis_iorx_tvalid,
+    input              m_axis_iorx_tready,
+    output             m_axis_iorx_tlast ,
+    output   [63: 0]   m_axis_iorx_tdata ,
+    output   [ 7: 0]   m_axis_iorx_tkeep ,
+    output   [31: 0]   m_axis_iorx_tuser ,
 
     input              s_axis_ireq_tvalid,             // Indicates Valid Input on the Request Channel
     output             s_axis_ireq_tready,             // Beat has been accepted
@@ -168,7 +168,7 @@ module srio_gen2_v4_1_16_unifiedtop #(
 
     input               s_axis_msgireq_tvalid,        // input         default values
     output              s_axis_msgireq_tready,        // output
-    input  [63: 0]      s_axis_msgireq_tlast ,        // input
+    input               s_axis_msgireq_tlast ,        // input
     input  [63: 0]      s_axis_msgireq_tdata ,        // input  [63:0]
     input  [ 7: 0]      s_axis_msgireq_tkeep ,        // input  [7:0]
     input  [31: 0]      s_axis_msgireq_tuser ,        // input  [31:0]
@@ -292,7 +292,7 @@ module srio_gen2_v4_1_16_unifiedtop #(
     input               s_axi_cfgl_wvalid ,
     output              s_axi_cfgl_wready ,
     input  [31:0]       s_axi_cfgl_wdata  ,
-    input  [3:0]        s_axi_cfgl_wstrb  ,
+    input  [ 3:0]       s_axi_cfgl_wstrb  ,
     output              s_axi_cfgl_bvalid ,
     input               s_axi_cfgl_bready ,
     input               s_axi_cfgl_arvalid,
@@ -302,9 +302,9 @@ module srio_gen2_v4_1_16_unifiedtop #(
     input               s_axi_cfgl_rready ,
     output [31: 0]      s_axi_cfgl_rdata  ,   
 
-    output              port_decode_error ,     //not sure
-    input  [ 7: 0]      deviceid          ,
-    input               log_lcl_maint_only,     //not sure
+    output                            port_decode_error ,     //not sure
+    input  [C_DEVICEID_WIDTH - 1: 0]      deviceid          ,
+    input                             log_lcl_maint_only,     //not sure
 
       // BUF signals
     input               buf_lcl_phy_clk ,
@@ -341,9 +341,9 @@ module srio_gen2_v4_1_16_unifiedtop #(
     input               s_axis_phyr_tvalid,
     output              s_axis_phyr_tready,
     input   [63: 0]     s_axis_phyr_tdata ,
-    input               s_axis_phyr_tkeep ,
+    input   [ 7: 0]     s_axis_phyr_tkeep ,
     input               s_axis_phyr_tlast ,
-    input               s_axis_phyr_tuser ,
+    input   [ 7: 0]     s_axis_phyr_tuser ,
 
     input               buf_lcl_phy_rewind,
 
@@ -401,7 +401,7 @@ module srio_gen2_v4_1_16_unifiedtop #(
     output              phy_lcl_phy_rewind       ,
     output  [ 5: 0]     phy_lcl_phy_rcvd_buf_stat,
     output  [ 5: 0]     phy_lcl_phy_next_fm      ,
-    output              phy_lcl_phy_last_ack     ,
+    output  [ 5: 0]     phy_lcl_phy_last_ack     ,
     output  [ 5: 0]     phy_lcl_phy_buf_stat     ,
     output              phy_lcl_tx_flow_control  ,
 
@@ -434,28 +434,29 @@ module srio_gen2_v4_1_16_unifiedtop #(
     output              link_initialized      , 
     output              phy_rcvd_mce          , 
     output              phy_rcvd_link_reset   , 
-    input               port_error            , 
-    input               port_initialized      , 
+    output              port_error            , 
+    output              port_initialized      , 
     input               mode_1x               , 
     input               rx_lane_r             , 
-    output              port_timeout          , 
+    output  [23: 0]     port_timeout          , 
     output              srio_host             , 
 
     // High-Speed Serial IO
-    output      [C_LINK_WIDTH*GT_BYTES*8-1:0]     gttx_data         ,
-    output      [C_LINK_WIDTH*GT_BYTES-1:0]       gttx_charisk      ,
-    input       [C_LINK_WIDTH*GT_BYTES*8-1:0]     gtrx_data         ,
-    input       [C_LINK_WIDTH*GT_BYTES-1:0]       gtrx_charisk      ,
-    input       [C_LINK_WIDTH*GT_BYTES-1:0]       gtrx_chariscomma  ,
-    input       [C_LINK_WIDTH*GT_BYTES-1:0]       gtrx_disperr      ,
-    input       [C_LINK_WIDTH*GT_BYTES-1:0]       gtrx_notintable   ,
-    output reg  [C_LINK_WIDTH-1:0]    gttx_inhibit      ,
+    output      [C_LINK_WIDTH*4*8-1:0]     gttx_data         ,
+    output      [C_LINK_WIDTH*4-1:0]       gttx_charisk      ,
+    input       [C_LINK_WIDTH*4*8-1:0]     gtrx_data         ,
+    input       [C_LINK_WIDTH*4-1:0]       gtrx_charisk      ,
+    input       [C_LINK_WIDTH*4-1:0]       gtrx_chariscomma  ,
+    input       [C_LINK_WIDTH*4-1:0]       gtrx_disperr      ,
+    input       [C_LINK_WIDTH*4-1:0]       gtrx_notintable   ,
+    //output reg  [C_LINK_WIDTH-1:0]    gttx_inhibit      ,
+    output      [C_LINK_WIDTH-1:0]    gttx_inhibit      ,
     input       [C_LINK_WIDTH-1:0]    gtrx_chanisaligned,
     input                             gtrx_reset_req    ,
     input       [C_LINK_WIDTH-1:0]    gtrx_reset_done   ,
-    output                          gtrx_reset        ,
-    output                          gtrx_chanbonden   ,
-    output      [223: 0]            phy_debug         
+    output                            gtrx_reset        ,
+    output                            gtrx_chanbonden   ,
+    output      [223: 0]              phy_debug         
     );
 
 
@@ -543,7 +544,7 @@ module srio_gen2_v4_1_16_unifiedtop #(
         .LA_rx_porta_tlast      (m_axis_iresp_tlast),       // Indicates last beat
         .LA_rx_porta_tdata      (m_axis_iresp_tdata),       // Resp Data Bus
         .LA_rx_porta_tkeep      (m_axis_iresp_tkeep),       // Resp Keep Bus
-        .LA_rx_porta_tuser      ({8'b0, m_axis_iresp_tuser}),       // Resp User Bus
+        .LA_rx_porta_tuser      (m_axis_iresp_tuser),       // Resp User Bus
 
 
         .UG_tx_portb_tvalid     (s_axis_tresp_tvalid),      // Indicates Valid Input on the Request Channel
@@ -559,99 +560,99 @@ module srio_gen2_v4_1_16_unifiedtop #(
         .LA_rx_portb_tlast      (m_axis_treq_tlast),       // Indicates last beat
         .LA_rx_portb_tdata      (m_axis_treq_tdata),       // Resp Data Bus
         .LA_rx_portb_tkeep      (m_axis_treq_tkeep),       // Resp Keep Bus
-        .LA_rx_portb_tuser      ({8'b0, m_axis_treq_tuser}),       // Resp User Bus
+        .LA_rx_portb_tuser      (m_axis_treq_tuser),       // Resp User Bus
 
         
-        .UG_tx_portc_tvalid     (0),      // Indicates Valid Input on the Request Channel
-        .LA_tx_portc_tready     ( ),      // Beat has been accepted
-        .UG_tx_portc_tlast      (0),       // Indicates last beat
-        .UG_tx_portc_tdata      (0),       // Req Data Bus
-        .UG_tx_portc_tkeep      (0),       // Req Keep Bus
-        .UG_tx_portc_tuser      (0),       // Req User Bus
+        .UG_tx_portc_tvalid     (1'b0 ),      // Indicates Valid Input on the Request Channel
+        .LA_tx_portc_tready     (     ),      // Beat has been accepted
+        .UG_tx_portc_tlast      (1'b0 ),       // Indicates last beat
+        .UG_tx_portc_tdata      (64'b0),       // Req Data Bus
+        .UG_tx_portc_tkeep      (8'b0 ),       // Req Keep Bus
+        .UG_tx_portc_tuser      (40'b0),       // Req User Bus
 
         
-        .LA_rx_portc_tvalid     (0),      // Indicates Valid Output on the Response Channel
-        .UG_rx_portc_tready     (0),      // Beat has been accepted
-        .LA_rx_portc_tlast      (0),       // Indicates last beat
-        .LA_rx_portc_tdata      (0),       // Resp Data Bus
-        .LA_rx_portc_tkeep      (0),       // Resp Keep Bus
-        .LA_rx_portc_tuser      (0),       // Resp User Bus
+        .LA_rx_portc_tvalid     ( ),      // Indicates Valid Output on the Response Channel
+        .UG_rx_portc_tready     (1'b0),      // Beat has been accepted
+        .LA_rx_portc_tlast      ( ),       // Indicates last beat
+        .LA_rx_portc_tdata      ( ),       // Resp Data Bus
+        .LA_rx_portc_tkeep      ( ),       // Resp Keep Bus
+        .LA_rx_portc_tuser      ( ),       // Resp User Bus
 
         
-        .UG_tx_portd_tvalid     (0),      // Indicates Valid Input on the Request Channel
-        .LA_tx_portd_tready     ( ),      // Beat has been accepted
-        .UG_tx_portd_tlast      (0),       // Indicates last beat
-        .UG_tx_portd_tdata      (0),       // Req Data Bus
-        .UG_tx_portd_tkeep      (0),       // Req Keep Bus
-        .UG_tx_portd_tuser      (0),       // Req User Bus
+        .UG_tx_portd_tvalid     (1'b0 ),      // Indicates Valid Input on the Request Channel
+        .LA_tx_portd_tready     (     ),      // Beat has been accepted
+        .UG_tx_portd_tlast      (1'b0 ),       // Indicates last beat
+        .UG_tx_portd_tdata      (64'b0),       // Req Data Bus
+        .UG_tx_portd_tkeep      (8'b0 ),       // Req Keep Bus
+        .UG_tx_portd_tuser      (40'b0),       // Req User Bus
 
         
         .LA_rx_portd_tvalid     ( ),      // Indicates Valid Output on the Response Channel
-        .UG_rx_portd_tready     (0),      // Beat has been accepted
+        .UG_rx_portd_tready     (1'b0),      // Beat has been accepted
         .LA_rx_portd_tlast      ( ),       // Indicates last beat
         .LA_rx_portd_tdata      ( ),       // Resp Data Bus
         .LA_rx_portd_tkeep      ( ),       // Resp Keep Bus
         .LA_rx_portd_tuser      ( ),       // Resp User Bus
 
         
-        .UG_tx_porte_tvalid     (0),      // Indicates Valid Input on the Request Channel
-        .LA_tx_porte_tready     ( ),      // Beat has been accepted
-        .UG_tx_porte_tlast      (0),       // Indicates last beat
-        .UG_tx_porte_tdata      (0),       // Req Data Bus
-        .UG_tx_porte_tkeep      (0),       // Req Keep Bus
-        .UG_tx_porte_tuser      (0),       // Req User Bus
+        .UG_tx_porte_tvalid     (1'b0 ),      // Indicates Valid Input on the Request Channel
+        .LA_tx_porte_tready     (     ),      // Beat has been accepted
+        .UG_tx_porte_tlast      (1'b0 ),       // Indicates last beat
+        .UG_tx_porte_tdata      (64'b0),       // Req Data Bus
+        .UG_tx_porte_tkeep      (8'b0 ),       // Req Keep Bus
+        .UG_tx_porte_tuser      (40'b0),       // Req User Bus
 
         
         .LA_rx_porte_tvalid     ( ),      // Indicates Valid Output on the Response Channel
-        .UG_rx_porte_tready     (0),      // Beat has been accepted
+        .UG_rx_porte_tready     (1'b0),      // Beat has been accepted
         .LA_rx_porte_tlast      ( ),       // Indicates last beat
         .LA_rx_porte_tdata      ( ),       // Resp Data Bus
         .LA_rx_porte_tkeep      ( ),       // Resp Keep Bus
         .LA_rx_porte_tuser      ( ),       // Resp User Bus
 
         
-        .UG_tx_portf_tvalid     (0),      // Indicates Valid Input on the Request Channel
-        .LA_tx_portf_tready     ( ),      // Beat has been accepted
-        .UG_tx_portf_tlast      (0),       // Indicates last beat
-        .UG_tx_portf_tdata      (0),       // Req Data Bus
-        .UG_tx_portf_tkeep      (0),       // Req Keep Bus
-        .UG_tx_portf_tuser      (0),       // Req User Bus
+        .UG_tx_portf_tvalid     (1'b0 ),      // Indicates Valid Input on the Request Channel
+        .LA_tx_portf_tready     (     ),      // Beat has been accepted
+        .UG_tx_portf_tlast      (1'b0 ),       // Indicates last beat
+        .UG_tx_portf_tdata      (64'b0),       // Req Data Bus
+        .UG_tx_portf_tkeep      (8'b0 ),       // Req Keep Bus
+        .UG_tx_portf_tuser      (40'b0),       // Req User Bus
 
         
         .LA_rx_portf_tvalid     ( ),      // Indicates Valid Output on the Response Channel
-        .UG_rx_portf_tready     (0),      // Beat has been accepted
+        .UG_rx_portf_tready     (1'b0),      // Beat has been accepted
         .LA_rx_portf_tlast      ( ),       // Indicates last beat
         .LA_rx_portf_tdata      ( ),       // Resp Data Bus
         .LA_rx_portf_tkeep      ( ),       // Resp Keep Bus
         .LA_rx_portf_tuser      ( ),       // Resp User Bus
 
         
-        .UG_tx_portg_tvalid     (0),      // Indicates Valid Input on the Request Channel
-        .LA_tx_portg_tready     ( ),      // Beat has been accepted
-        .UG_tx_portg_tlast      (0),       // Indicates last beat
-        .UG_tx_portg_tdata      (0),       // Req Data Bus
-        .UG_tx_portg_tkeep      (0),       // Req Keep Bus
-        .UG_tx_portg_tuser      (0),       // Req User Bus
+        .UG_tx_portg_tvalid     (1'b0 ),      // Indicates Valid Input on the Request Channel
+        .LA_tx_portg_tready     (     ),      // Beat has been accepted
+        .UG_tx_portg_tlast      (1'b0 ),       // Indicates last beat
+        .UG_tx_portg_tdata      (64'b0),       // Req Data Bus
+        .UG_tx_portg_tkeep      (8'b0 ),       // Req Keep Bus
+        .UG_tx_portg_tuser      (40'b0),       // Req User Bus
 
         
         .LA_rx_portg_tvalid     ( ),      // Indicates Valid Output on the Response Channel
-        .UG_rx_portg_tready     (0),      // Beat has been accepted
+        .UG_rx_portg_tready     (1'b0),      // Beat has been accepted
         .LA_rx_portg_tlast      ( ),       // Indicates last beat
         .LA_rx_portg_tdata      ( ),       // Resp Data Bus
         .LA_rx_portg_tkeep      ( ),       // Resp keep Bus
         .LA_rx_portg_tuser      ( ),       // Resp User Bus
 
         
-        .UG_tx_porth_tvalid     (0),      // Indicates Valid Input on the Request Channel
-        .LA_tx_porth_tready     ( ),      // Beat has been accepted
-        .UG_tx_porth_tlast      (0),       // Indicates last beat
-        .UG_tx_porth_tdata      (0),       // Req Data Bus
-        .UG_tx_porth_tkeep      (0),       // Req Keep Bus
-        .UG_tx_porth_tuser      (0),       // Req User Bus
+        .UG_tx_porth_tvalid     (1'b0 ),      // Indicates Valid Input on the Request Channel
+        .LA_tx_porth_tready     (     ),      // Beat has been accepted
+        .UG_tx_porth_tlast      (1'b0 ),       // Indicates last beat
+        .UG_tx_porth_tdata      (64'b0),       // Req Data Bus
+        .UG_tx_porth_tkeep      (8'b0 ),       // Req Keep Bus
+        .UG_tx_porth_tuser      (40'b0),       // Req User Bus
 
         
         .LA_rx_porth_tvalid     ( ),      // Indicates Valid Output on the Response Channel
-        .UG_rx_porth_tready     (0),      // Beat has been accepted
+        .UG_rx_porth_tready     (1'b0),      // Beat has been accepted
         .LA_rx_porth_tlast      ( ),       // Indicates last beat
         .LA_rx_porth_tdata      ( ),       // Resp Data Bus
         .LA_rx_porth_tkeep      ( ),       // Resp Keep Bus
@@ -679,7 +680,7 @@ module srio_gen2_v4_1_16_unifiedtop #(
 
         
         .LR_cfgr_awvalid            (m_axi_cfgr_awvalid),// Write Command Valid
-        .CF_cfgr_awready            (m_axi_cfgr_awread),// Write Port Ready
+        .CF_cfgr_awready            (m_axi_cfgr_awready),// Write Port Ready
         .LR_cfgr_awaddr             (m_axi_cfgr_awaddr),// Write Address
         .LR_cfgr_wvalid             (m_axi_cfgr_wvalid),// Write Data Valid
         .CF_cfgr_wready             (m_axi_cfgr_wready),// Write Port Ready
@@ -705,9 +706,9 @@ module srio_gen2_v4_1_16_unifiedtop #(
         .CF_cfgr_rresp              (m_axi_cfgr_rresp ),// Read Response
 
 
-        .LD_buft_tvalid             (m_axis_buft_valid),          // Valid packet beat
-        .BT_buft_tready             (m_axis_buft_ready),          // Packet beat accepted
-        .LD_buft_tdata              (m_axis_buft_data ),           // Packet data
+        .LD_buft_tvalid             (m_axis_buft_tvalid),          // Valid packet beat
+        .BT_buft_tready             (m_axis_buft_tready),          // Packet beat accepted
+        .LD_buft_tdata              (m_axis_buft_tdata ),           // Packet data
         .LD_buft_tkeep              (m_axis_buft_tkeep),           // Valid bytes in this beat, only valid on last
         .LD_buft_tlast              (m_axis_buft_tlast),           // Last beat
         .LD_buft_tuser              (m_axis_buft_tuser),           // {4'h00, Response, VC, CRF, 1'b0}
@@ -725,7 +726,7 @@ module srio_gen2_v4_1_16_unifiedtop #(
 
         
         .CF_cfgl_awvalid            (s_axi_cfgl_awvalid),// Write Command Valid
-        .LC_cfgl_awready            (s_axi_cfgl_awread ),// Write Port Ready
+        .LC_cfgl_awready            (s_axi_cfgl_awready),// Write Port Ready
         .CF_cfgl_awaddr             (s_axi_cfgl_awaddr ),// Write Address
         .CF_cfgl_wvalid             (s_axi_cfgl_wvalid ),// Write Data Valid
         .LC_cfgl_wready             (s_axi_cfgl_wready ),// Write Port Ready
@@ -733,15 +734,15 @@ module srio_gen2_v4_1_16_unifiedtop #(
         .CF_cfgl_wstrb              (s_axi_cfgl_wstrb  ),// Write Data byte enables
         .LC_cfgl_bvalid             (s_axi_cfgl_bvalid ),// Write Response Valid
         .CF_cfgl_bready             (s_axi_cfgl_bready ),// Write Response Fabric Ready
-        .CF_cfgl_arvalid            (s_axi_cfgl_arvali ),// Read Command Valid
-        .LC_cfgl_arready            (s_axi_cfgl_arread ),// Read Port Ready
+        .CF_cfgl_arvalid            (s_axi_cfgl_arvalid),// Read Command Valid
+        .LC_cfgl_arready            (s_axi_cfgl_arready),// Read Port Ready
         .CF_cfgl_araddr             (s_axi_cfgl_araddr ),// Read Address
         .LC_cfgl_rvalid             (s_axi_cfgl_rvalid ),// Read Response Valid
         .CF_cfgl_rready             (s_axi_cfgl_rready ),// Read Response Fabric Ready
         .LC_cfgl_rdata              (s_axi_cfgl_rdata  ),// Read Data
 
   //Sideband
-        .LC_deviceid                (devicdid),             // Current DeviceID from the DeviceID register
+        .LC_deviceid                (deviceid),             // Current DeviceID from the DeviceID register
         .PC_maint_only              (log_lcl_maint_only),// LOG can only send maint transactions
         .LA_port_decode_error       (port_decode_error)// No valid output port for the RX transaction
 
@@ -775,9 +776,9 @@ module srio_gen2_v4_1_16_unifiedtop #(
         .buf_rst                    (buf_rst),
         .cfg_rst                    (buf_lcl_cfg_rst),       
         
-        .LD_buft_tvalid             (s_axis_buf_tvalid ),//Valid Packet Beat
+        .LD_buft_tvalid             (s_axis_buft_tvalid ),//Valid Packet Beat
         .BT_buft_tready             (s_axis_buft_tready),       //Packet Beat Accepted
-        .LD_buft_tdata              (s_axis_buft_data  ),        //Packet Data
+        .LD_buft_tdata              (s_axis_buft_tdata  ),        //Packet Data
         .LD_buft_tkeep              (s_axis_buft_tkeep ),        //Valid Bytes in this beat, only valid on last
         .LD_buft_tlast              (s_axis_buft_tlast ),        //Last Beat
         .LD_buft_tuser              (s_axis_buft_tuser),        //{4'h00, Response, VC, CRF, 1'b0} AXI Compliance Pad
@@ -813,7 +814,7 @@ module srio_gen2_v4_1_16_unifiedtop #(
         .BR_phy_buf_stat            (buf_lcl_phy_buf_stat),      //Buffer Status from the RX Buffer       .
         
         .CF_cfgb_awvalid            (s_axi_cfgb_awvalid),       //Write Command Valid
-        .BC_cfgb_awready            (s_axi_cfgb_awread ),       //Write Port Ready
+        .BC_cfgb_awready            (s_axi_cfgb_awready),       //Write Port Ready
         .CF_cfgb_awaddr             (s_axi_cfgb_awaddr ),       //Write Address
         .CF_cfgb_wvalid             (s_axi_cfgb_wvalid ),       //Write Data Valid
         .BC_cfgb_wready             (s_axi_cfgb_wready ),       //Write Port Ready
@@ -821,8 +822,8 @@ module srio_gen2_v4_1_16_unifiedtop #(
         .CF_cfgb_wstrb              (s_axi_cfgb_wstrb  ),       //Write Data Byte Enables
         .BC_cfgb_bvalid             (s_axi_cfgb_bvalid ),       //Write Response Valid
         .CF_cfgb_bready             (s_axi_cfgb_bready ),       //Write Response Fabric Ready
-        .CF_cfgb_arvalid            (s_axi_cfgb_arvali ),       //Read Command Valid
-        .BC_cfgb_arready            (s_axi_cfgb_arread ),       //Read port Ready
+        .CF_cfgb_arvalid            (s_axi_cfgb_arvalid),       //Read Command Valid
+        .BC_cfgb_arready            (s_axi_cfgb_arready),       //Read port Ready
         .CF_cfgb_araddr             (s_axi_cfgb_araddr ),       //Read Address
         .BC_cfgb_rvalid             (s_axi_cfgb_rvalid ),       //Read Response Valid
         .CF_cfgb_rready             (s_axi_cfgb_rready ),       //Read response Fabric Ready
@@ -860,7 +861,7 @@ module srio_gen2_v4_1_16_unifiedtop #(
         .SW_CSR                         (C_SW_CSR       ),
         .EVAL                           (1              ),
         .SWITCH_MODE                    (0              ),
-        .GT_BYTES                       (4              )
+        .GT_BYTES                       (GT_BYTES       )
     )
     srio_gen2_v4_1_16_phy_top(
         .phy_clk                        (phy_lcl_phy_clk),                    // PHY interface clock
@@ -886,7 +887,7 @@ module srio_gen2_v4_1_16_unifiedtop #(
         .PR_link_initialized            (link_initialized),        // Indicates we are ready to transmit data
         .PR_phyr_tvalid                 (m_axis_phyr_tvalid),             // Valid data indicator
         .BR_phyr_tready                 (m_axis_phyr_tready),             // Destination Ready
-        .PR_phyr_tdata                  (m_axis_phyr_tready),              // Packet for transfer
+        .PR_phyr_tdata                  (m_axis_phyr_tdata),              // Packet for transfer
         .PR_phyr_tkeep                  (m_axis_phyr_tkeep),              // Byte Enable for transferred packet
         .PR_phyr_tlast                  (m_axis_phyr_tlast),              // Last DW of incoming packet
         .PR_phyr_tuser                  (m_axis_phyr_tuser),              // {5'h00, VC, CRF, src_dsc}
@@ -894,8 +895,8 @@ module srio_gen2_v4_1_16_unifiedtop #(
         .PR_phy_rcvd_buf_stat           (phy_lcl_phy_rcvd_buf_stat),       // Buffer status received from the link partner
         .PR_phy_rcvd_mce                (phy_rcvd_mce),            // MCE control symbol received
         .PR_phy_rcvd_link_reset         (phy_rcvd_link_reset),        // Received 4 consecutive link reset control symbols
-        .PR_port_error                  (PR_port_error),             // Indicator that OLLM RX is in Port Error State
-        .PP_port_initialized            (PP_port_initialized),         // Indicates port is initialized
+        .PR_port_error                  (port_error),             // Indicator that OLLM RX is in Port Error State
+        .PP_port_initialized            (port_initialized),         // Indicates port is initialized
         .PP_mode_1x                     (mode_1x),                    // Indicates the link trained down to 1x
         .PP_idle2_selected              (phy_lcl_idle2_selected),// Indicates the link is operating in IDLE2 mode
         .PP_idle_selected               (idle_selected),              // Indicates the IDLE Sequence is selected
@@ -935,7 +936,7 @@ module srio_gen2_v4_1_16_unifiedtop #(
         .PP_rx_lane_r                   (rx_lane_r         ),         // Receiving Data on lane R
         .PP_gtrx_chanbonden             (gtrx_chanbonden   ),         // Enable chanel bonding
         .PP_debug                       (pp_debug          ),         // Debugs from OPLM
-        .PT_debug                       (rt_debug          ),         // Debugs from OLLM TX
+        .PT_debug                       (pt_debug          ),         // Debugs from OLLM TX
         .PR_debug                       (pr_debug          )             
     );
 endmodule

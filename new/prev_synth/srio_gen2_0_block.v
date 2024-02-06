@@ -56,7 +56,7 @@ module srio_gen2_0_block
     parameter TCQ                       = 100,
 
     parameter COMPONENT_NAME            = ("srio_gen2_0"),
-    parameter C_DEVICEID_WIDTH          = ( 8) ,
+    parameter C_DEVICEID_WIDTH          = ( 16) ,
     parameter C_DEVICEID                = ("00FF"),
     parameter C_INIT_NREAD              = ( 1) ,
     parameter C_INIT_NWRITE             = ( 1) ,
@@ -89,7 +89,8 @@ module srio_gen2_0_block
     parameter C_ASSY_ID                 = ("0000"),
     parameter C_ASSY_VENDOR             = ("0000"),
     parameter C_ASSY_REV                = ("0000"),
-    parameter C_PHY_EF_PTR              = ("0100"),
+    //parameter C_PHY_EF_PTR              = ("0100"),
+    parameter C_PHY_EF_PTR              = (16'h0100),
     parameter C_PE_BRIDGE               = ( 0) ,
     parameter C_PE_MEMORY               = ( 1) ,
     parameter C_PE_PROC                 = ( 0) ,
@@ -119,17 +120,17 @@ module srio_gen2_0_block
     parameter C_SCRAM                   = ( 0) ,
     parameter C_RETRY                   = ( 1) ,
     parameter C_LINK_REQUESTS           = ( 3) ,
-    parameter C_LANE_EF_PTR             = ("0400"),
+    parameter C_LANE_EF_PTR             = (16'h0400),
     parameter C_VC_EF_PTR               = ("800"),
     parameter C_LINK_TIMEOUT            = ("FFFFFF"),
     parameter C_PORT_TIMEOUT            = ("FFFFFF"),
     parameter C_IS_HOST                 = ( 1) ,
     parameter C_MASTER_EN               = ( 1) ,
     parameter C_DISCOVERED              = ( 0) ,
-    parameter C_USER_EF_PTR             = ("0000"),
+    parameter C_USER_EF_PTR             = (16'h0000),
     parameter C_SW_CSR                  = ( 0) ,
     parameter c_enable_user_ef          = ( 0) ,
-    parameter c_device_id_width         = ( 8) ,
+    parameter c_device_id_width         = (16) ,
     parameter c_device_id               = ("00FF"),
     parameter c_validation              = ( 0) ,
     parameter c_debug                   = ( 0) ,
@@ -568,7 +569,7 @@ module srio_gen2_0_block
         .c_gt0_debug_ports              (c_gt0_debug_ports       ),// not directly used in RTL
         .c_side_band                    (c_side_band             ),// not directly used in RTL
         .c_transceivercontrol           (c_transceivercontrol    ),
-        .GT_BYTES                       (8)
+        .GT_BYTES                       (4)
         )
         srio_gen2_v4_1_5_unifiedtop_inst(
       // LOG signals

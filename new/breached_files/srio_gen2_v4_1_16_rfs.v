@@ -55,7 +55,7 @@ module srio_gen2_v4_1_16_cfg_axi
     input             CF_wvalid,          // Write Data Valid
     output reg        CCA_wready,         // Write Data Port Ready
     input      [31:0] CF_wdata,           // Write Data
-    input      [3:0]  CF_wstrb,           // Write Data Byte Enables
+    input      [ 3:0] CF_wstrb,           // Write Data Byte Enables
     output reg        CCA_bvalid,         // Write Response Valid
     input             CF_bready,          // Write Response Fabric Ready
     input             CF_arvalid,         // Read Address Valid
@@ -7495,12 +7495,16 @@ module srio_gen2_v4_1_16_phy_cfg_top
        (PHY_EF_PTR > (16'hffff - LPS_EF_SIZE - LANE_EF_SIZE - VC_EF_SIZE - USER_EF_SIZE)) ||  // Too big?
        (PHY_EF_PTR % LPS_EF_SIZE != 0))                                                       // Wrong boundary?
     begin
+      $display("Invalid phy_ef_ptr");
+      $display(PHY_EF_PTR);
       $finish; // PHY_EF_PTR is invalid
     end
     if ((LANE_EF_PTR < (PHY_EF_PTR + LPS_EF_SIZE)) ||                                         // Too small?
       (LANE_EF_PTR > (16'hffff - LANE_EF_SIZE - VC_EF_SIZE - USER_EF_SIZE)) ||               // Too big?
        (LANE_EF_PTR % LANE_EF_SIZE != 0))                                                     // Wrong boundary?
     begin
+      $display("Invalid phy_ef_ptr");
+      $display(LANE_EF_PTR);
       $finish; // LANE_EF_PTR is invalid
     end
     if (VC != 0) begin
@@ -25981,7 +25985,7 @@ module srio_gen2_v4_1_16_buf_rx_bram_bank
   // }}} ---------------------------------
 
   // {{{ Block memory Instantiation --------
-  blk_mem_gen_v8_4_2                                       // blk_mem_gen_v8_0 values 
+  blk_mem_gen_v8_4_4                                       // blk_mem_gen_v8_0 values 
    #(
      .C_ADDRA_WIDTH               (C_ADDR_LEN),          // (C_ADDR_LEN),
      .C_ADDRB_WIDTH               (C_ADDR_LEN),          // (C_ADDR_LEN),
@@ -27480,7 +27484,7 @@ module srio_gen2_v4_1_16_buf_tx_sync_unit
           BTS_buft_tready <= !afifo_full;
       end
 
-    fifo_generator_v13_2_7
+    fifo_generator_vlog_beh
      // {{{ parameter list ---------------
      #(.C_COMMON_CLOCK                 (0),
        .C_COUNT_TYPE                   (0),
@@ -28002,7 +28006,7 @@ module srio_gen2_v4_1_16_buf_tx_sync_unit
 
   // {{{ Asynch FIFO for returning information from PHY domain --
 
-  fifo_generator_v13_2_7
+  fifo_generator_vlog_beh
    // {{{ parameter list ---------------
    #(
      .C_COMMON_CLOCK                 (0),
@@ -28211,7 +28215,7 @@ module srio_gen2_v4_1_16_buf_tx_sync_unit
      )
    // }}} ---------------
    srl16_fifo_inst
-      (.din                            (2'b1),  // NOTE - CFR - This only needs to be 1
+      (/*.din                            (2'b1),  // NOTE - CFR - This only needs to be 1
        .rd_clk                         (log_clk),
        .rd_en                          (outstanding_packets_dec),
        .rst                            (buf_phy_rst_q),
@@ -28219,231 +28223,251 @@ module srio_gen2_v4_1_16_buf_tx_sync_unit
        .wr_en                          (BT_packet_ack),
        .dout                           (),
        .empty                          (log_packet_available_n),
-       .full                           (),
-       .clk                            (),
-       .int_clk                        (),
-       .backup                         (),
-       .backup_marker                  (),
-       .prog_empty_thresh              (),
-       .prog_empty_thresh_assert       (),
-       .prog_empty_thresh_negate       (),
-       .prog_full_thresh               (),
-       .prog_full_thresh_assert        (),
-       .prog_full_thresh_negate        (),
-       .rd_rst                         (),
-       .srst                           (),
-       .wr_rst                         (),
-       .almost_empty                   (),
-       .almost_full                    (),
-       .data_count                     (),
-       .overflow                       (),
-       .prog_empty                     (),
-       .prog_full                      (),
-       .valid                          (),
-       .rd_data_count                  (),
-       .underflow                      (),
-       .wr_ack                         (),
-       .wr_data_count                  (),
-       .sbiterr                        (),
-       .dbiterr                        (),
-       .injectsbiterr                  (),
-       .injectdbiterr                  (),
+      */
+        .backup                         (),
+        .backup_marker                  (),
+        .clk                            (),
+        .rst                            (buf_phy_rst_q),
+        .srst                           (),
+        .wr_clk                         (phy_clk),
+        .wr_rst                         (),
+        .rd_clk                         (log_clk),
+        .rd_rst                         (),
+        .din                            (2'b1),
+        .wr_en                          (BT_packet_ack),
+        .rd_en                          (outstanding_packets_dec),
+        .prog_empty_thresh              (),
+        .prog_empty_thresh_assert       (),
+        .prog_empty_thresh_negate       (),
+        .prog_full_thresh               (),
+        .prog_full_thresh_assert        (),
+        .prog_full_thresh_negate        (),
+        .int_clk                        (),
+        .injectdbiterr                  (),
+        .injectsbiterr                  (),
+        .sleep                          (1'b0),
+        .dout                           (),
+        .full                           (),
+        .almost_full                    (),
+        .wr_ack                         (),
+        .overflow                       (),
+        .empty                          (log_packet_available_n),
+        .almost_empty                   (),
+        .valid                          (),
+        .underflow                      (),
+        .data_count                     (),
+        .rd_data_count                  (),
+        .wr_data_count                  (),
+        .prog_full                      (),
+        .prog_empty                     (),
+        .sbiterr                        (),
+        .dbiterr                        (),
+        .wr_rst_busy                    (),
+        .rd_rst_busy                    (),
+        .m_aclk                         (),
+        .s_aclk                         (),
+        .s_aresetn                      (),
+        .s_aclk_en                      (),
+        .m_aclk_en                      (),
+        
+        .s_axi_awid                     (),
+        .s_axi_awaddr                   (),
+        .s_axi_awlen                    (),
+        .s_axi_awsize                   (),
+        .s_axi_awburst                  (),
+        .s_axi_awlock                   (),
+        .s_axi_awcache                  (),
+        .s_axi_awprot                   (),
+        .s_axi_awqos                    (),
+        .s_axi_awregion                 (),
+        .s_axi_awuser                   (),
+        .s_axi_awvalid                  (),
+        .s_axi_awready                  (),
+        .s_axi_wid                      (),
+        .s_axi_wdata                    (),
+        .s_axi_wstrb                    (),
+        .s_axi_wlast                    (),
+        .s_axi_wuser                    (),
+        .s_axi_wvalid                   (),
+        .s_axi_wready                   (),
+        .s_axi_bid                      (),
+        .s_axi_bresp                    (),
+        .s_axi_buser                    (),
+        .s_axi_bvalid                   (),
+        .s_axi_bready                   (),
+        
+        .m_axi_awid                     (),
+        .m_axi_awaddr                   (),
+        .m_axi_awlen                    (),
+        .m_axi_awsize                   (),
+        .m_axi_awburst                  (),
+        .m_axi_awlock                   (),
+        .m_axi_awcache                  (),
+        .m_axi_awprot                   (),
+        .m_axi_awqos                    (),
+        .m_axi_awregion                 (),
+        .m_axi_awuser                   (),
+        .m_axi_awvalid                  (),
+        .m_axi_awready                  (),
+        .m_axi_wid                      (),
+        .m_axi_wdata                    (),
+        .m_axi_wstrb                    (),
+        .m_axi_wlast                    (),
+        .m_axi_wuser                    (),
+        .m_axi_wvalid                   (),
+        .m_axi_wready                   (),
+        .m_axi_bid                      (),
+        .m_axi_bresp                    (),
+        .m_axi_buser                    (),
+        .m_axi_bvalid                   (),
+        .m_axi_bready                   (),
+        
+        .s_axi_arid                     (),
+        .s_axi_araddr                   (), 
+        .s_axi_arlen                    (),
+        .s_axi_arsize                   (),
+        .s_axi_arburst                  (),
+        .s_axi_arlock                   (),
+        .s_axi_arcache                  (),
+        .s_axi_arprot                   (),
+        .s_axi_arqos                    (),
+        .s_axi_arregion                 (),
+        .s_axi_aruser                   (),
+        .s_axi_arvalid                  (),
+        .s_axi_arready                  (),
+        .s_axi_rid                      (),       
+        .s_axi_rdata                    (), 
+        .s_axi_rresp                    (),
+        .s_axi_rlast                    (),
+        .s_axi_ruser                    (),
+        .s_axi_rvalid                   (),
+        .s_axi_rready                   (),
+        
+        .m_axi_arid                     (),        
+        .m_axi_araddr                   (),  
+        .m_axi_arlen                    (),
+        .m_axi_arsize                   (),
+        .m_axi_arburst                  (),
+        .m_axi_arlock                   (),
+        .m_axi_arcache                  (),
+        .m_axi_arprot                   (),
+        .m_axi_arqos                    (),
+        .m_axi_arregion                 (),
+        .m_axi_aruser                   (),
+        .m_axi_arvalid                  (),
+        .m_axi_arready                  (),
+        .m_axi_rid                      (),        
+        .m_axi_rdata                    (),  
+        .m_axi_rresp                    (),
+        .m_axi_rlast                    (),
+        .m_axi_ruser                    (),
+        .m_axi_rvalid                   (),
+        .m_axi_rready                   (),
+        
+        .s_axis_tvalid                  (),
+        .s_axis_tready                  (),
+        .s_axis_tdata                   (),
+        .s_axis_tstrb                   (),
+        .s_axis_tkeep                   (),
+        .s_axis_tlast                   (),
+        .s_axis_tid                     (),
+        .s_axis_tdest                   (),
+        .s_axis_tuser                   (),
+        
+        .m_axis_tvalid                  (),
+        .m_axis_tready                  (),
+        .m_axis_tdata                   (),
+        .m_axis_tstrb                   (),
+        .m_axis_tkeep                   (),
+        .m_axis_tlast                   (),
+        .m_axis_tid                     (),
+        .m_axis_tdest                   (),
+        .m_axis_tuser                   (),
+        
+        .axi_aw_injectsbiterr           (),
+        .axi_aw_injectdbiterr           (),
+        .axi_aw_prog_full_thresh        (),
+        .axi_aw_prog_empty_thresh       (),
+        .axi_aw_data_count              (),
+        .axi_aw_wr_data_count           (),
+        .axi_aw_rd_data_count           (),
+        .axi_aw_sbiterr                 (),
+        .axi_aw_dbiterr                 (),
+        .axi_aw_overflow                (),
+        .axi_aw_underflow               (),
+        .axi_aw_prog_full               (),
+        .axi_aw_prog_empty              (),
+        
+        .axi_w_injectsbiterr            (),
+        .axi_w_injectdbiterr            (),
+        .axi_w_prog_full_thresh         (),
+        .axi_w_prog_empty_thresh        (),
+        .axi_w_data_count               (),
+        .axi_w_wr_data_count            (),
+        .axi_w_rd_data_count            (),
+        .axi_w_sbiterr                  (),
+        .axi_w_dbiterr                  (),
+        .axi_w_overflow                 (),
+        .axi_w_underflow                (),
+        .axi_w_prog_full                (),
+        .axi_w_prog_empty               (),
+        
+        .axi_b_injectsbiterr            (),
+        .axi_b_injectdbiterr            (),
+        .axi_b_prog_full_thresh         (),
+        .axi_b_prog_empty_thresh        (),
+        .axi_b_data_count               (),
+        .axi_b_wr_data_count            (),
+        .axi_b_rd_data_count            (),
+        .axi_b_sbiterr                  (),
+        .axi_b_dbiterr                  (),
+        .axi_b_overflow                 (),
+        .axi_b_underflow                (),
+        .axi_b_prog_full                (),
+        .axi_b_prog_empty               (),
+        
+        .axi_ar_injectsbiterr           (),
+        .axi_ar_injectdbiterr           (),
+        .axi_ar_prog_full_thresh        (),
+        .axi_ar_prog_empty_thresh       (),
+        .axi_ar_data_count              (),
+        .axi_ar_wr_data_count           (),
+        .axi_ar_rd_data_count           (),
+        .axi_ar_sbiterr                 (),
+        .axi_ar_dbiterr                 (),
+        .axi_ar_overflow                (),
+        .axi_ar_underflow               (),
+        .axi_ar_prog_full               (),
+        .axi_ar_prog_empty              (),
+        
+        .axi_r_injectsbiterr            (),
+        .axi_r_injectdbiterr            (),
+        .axi_r_prog_full_thresh         (),
+        .axi_r_prog_empty_thresh        (),
+        .axi_r_data_count               (),
+        .axi_r_wr_data_count            (),
+        .axi_r_rd_data_count            (),
+        .axi_r_sbiterr                  (),
+        .axi_r_dbiterr                  (),
+        .axi_r_overflow                 (),
+        .axi_r_underflow                (),
+        .axi_r_prog_full                (),
+        .axi_r_prog_empty               (),
+        
+        .axis_injectsbiterr             (),
+        .axis_injectdbiterr             (),
+        .axis_prog_full_thresh          (),
+        .axis_prog_empty_thresh         (),
+        .axis_data_count                (),
+        .axis_wr_data_count             (),
+        .axis_rd_data_count             (),
+        .axis_sbiterr                   (),
+        .axis_dbiterr                   (),
+        .axis_overflow                  (),
+        .axis_underflow                 (),
+        .axis_prog_full                 (),
+        .axis_prog_empty                ()
 
-       .sleep          (1'b0),// added with default values
-       .wr_rst_busy    (),// added these 2 pins, core may not use those at the moment
-       .rd_rst_busy    (),// added these 2 pins, core may not use those at the moment
-
-       .m_aclk                         (),
-       .s_aclk                         (),
-       .s_aresetn                      (),
-       .s_aclk_en                      (),
-       .m_aclk_en                      (),
-       .s_axi_awid                     (),
-       .s_axi_awaddr                   (),
-       .s_axi_awlen                    (),
-       .s_axi_awsize                   (),
-       .s_axi_awburst                  (),
-       .s_axi_awlock                   (),
-       .s_axi_awcache                  (),
-       .s_axi_awprot                   (),
-       .s_axi_awqos                    (),
-       .s_axi_awregion                 (),
-       .s_axi_awuser                   (),
-       .s_axi_awvalid                  (),
-       .s_axi_awready                  (),
-       .s_axi_wid                      (),
-       .s_axi_wdata                    (),
-       .s_axi_wstrb                    (),
-       .s_axi_wlast                    (),
-       .s_axi_wuser                    (),
-       .s_axi_wvalid                   (),
-       .s_axi_wready                   (),
-       .s_axi_bid                      (),
-       .s_axi_bresp                    (),
-       .s_axi_buser                    (),
-       .s_axi_bvalid                   (),
-       .s_axi_bready                   (),
-       .m_axi_awid                     (),
-       .m_axi_awaddr                   (),
-       .m_axi_awlen                    (),
-       .m_axi_awsize                   (),
-       .m_axi_awburst                  (),
-       .m_axi_awlock                   (),
-       .m_axi_awcache                  (),
-       .m_axi_awprot                   (),
-       .m_axi_awqos                    (),
-       .m_axi_awregion                 (),
-       .m_axi_awuser                   (),
-       .m_axi_awvalid                  (),
-       .m_axi_awready                  (),
-       .m_axi_wid                      (),
-       .m_axi_wdata                    (),
-       .m_axi_wstrb                    (),
-       .m_axi_wlast                    (),
-       .m_axi_wuser                    (),
-       .m_axi_wvalid                   (),
-       .m_axi_wready                   (),
-       .m_axi_bid                      (),
-       .m_axi_bresp                    (),
-       .m_axi_buser                    (),
-       .m_axi_bvalid                   (),
-       .m_axi_bready                   (),
-       .s_axi_arid                     (),
-       .s_axi_araddr                   (),
-       .s_axi_arlen                    (),
-       .s_axi_arsize                   (),
-       .s_axi_arburst                  (),
-       .s_axi_arlock                   (),
-       .s_axi_arcache                  (),
-       .s_axi_arprot                   (),
-       .s_axi_arqos                    (),
-       .s_axi_arregion                 (),
-       .s_axi_aruser                   (),
-       .s_axi_arvalid                  (),
-       .s_axi_arready                  (),
-       .s_axi_rid                      (),
-       .s_axi_rdata                    (),
-       .s_axi_rresp                    (),
-       .s_axi_rlast                    (),
-       .s_axi_ruser                    (),
-       .s_axi_rvalid                   (),
-       .s_axi_rready                   (),
-       .m_axi_arid                     (),
-       .m_axi_araddr                   (),
-       .m_axi_arlen                    (),
-       .m_axi_arsize                   (),
-       .m_axi_arburst                  (),
-       .m_axi_arlock                   (),
-       .m_axi_arcache                  (),
-       .m_axi_arprot                   (),
-       .m_axi_arqos                    (),
-       .m_axi_arregion                 (),
-       .m_axi_aruser                   (),
-       .m_axi_arvalid                  (),
-       .m_axi_arready                  (),
-       .m_axi_rid                      (),
-       .m_axi_rdata                    (),
-       .m_axi_rresp                    (),
-       .m_axi_rlast                    (),
-       .m_axi_ruser                    (),
-       .m_axi_rvalid                   (),
-       .m_axi_rready                   (),
-       .s_axis_tvalid                  (),
-       .s_axis_tready                  (),
-       .s_axis_tdata                   (),
-       .s_axis_tstrb                   (),
-       .s_axis_tkeep                   (),
-       .s_axis_tlast                   (),
-       .s_axis_tid                     (),
-       .s_axis_tdest                   (),
-       .s_axis_tuser                   (),
-       .m_axis_tvalid                  (),
-       .m_axis_tready                  (),
-       .m_axis_tdata                   (),
-       .m_axis_tstrb                   (),
-       .m_axis_tkeep                   (),
-       .m_axis_tlast                   (),
-       .m_axis_tid                     (),
-       .m_axis_tdest                   (),
-       .m_axis_tuser                   (),
-       .axi_aw_injectsbiterr           (),
-       .axi_aw_injectdbiterr           (),
-       .axi_aw_prog_full_thresh        (),
-       .axi_aw_prog_empty_thresh       (),
-       .axi_aw_data_count              (),
-       .axi_aw_wr_data_count           (),
-       .axi_aw_rd_data_count           (),
-       .axi_aw_sbiterr                 (),
-       .axi_aw_dbiterr                 (),
-       .axi_aw_overflow                (),
-       .axi_aw_underflow               (),
-       .axi_aw_prog_full               (), // CR 724965 output port left with dummy assignment
-       .axi_aw_prog_empty              (), // CR 724965 output port left with dummy assignment
-       .axi_w_injectsbiterr            (),
-       .axi_w_injectdbiterr            (),
-       .axi_w_prog_full_thresh         (),
-       .axi_w_prog_empty_thresh        (),
-       .axi_w_data_count               (),
-       .axi_w_wr_data_count            (),
-       .axi_w_rd_data_count            (),
-       .axi_w_sbiterr                  (),
-       .axi_w_dbiterr                  (),
-       .axi_w_overflow                 (),
-       .axi_w_underflow                (),
-       .axi_b_injectsbiterr            (),
-       .axi_b_injectdbiterr            (),
-       .axi_w_prog_full                (), // CR 724965 output port left with dummy assignment
-       .axi_w_prog_empty               (), // CR 724965 output port left with dummy assignment
-       .axi_b_prog_full_thresh         (),
-       .axi_b_prog_empty_thresh        (),
-       .axi_b_data_count               (),
-       .axi_b_wr_data_count            (),
-       .axi_b_rd_data_count            (),
-       .axi_b_sbiterr                  (),
-       .axi_b_dbiterr                  (),
-       .axi_b_overflow                 (),
-       .axi_b_underflow                (),
-       .axi_ar_injectsbiterr           (),
-       .axi_ar_injectdbiterr           (),
-       .axi_b_prog_full                (), // CR 724965 output port left with dummy assignment
-       .axi_b_prog_empty               (), // CR 724965 output port left with dummy assignment
-       .axi_ar_prog_full_thresh        (),
-       .axi_ar_prog_empty_thresh       (),
-       .axi_ar_data_count              (),
-       .axi_ar_wr_data_count           (),
-       .axi_ar_rd_data_count           (),
-       .axi_ar_sbiterr                 (),
-       .axi_ar_dbiterr                 (),
-       .axi_ar_overflow                (),
-       .axi_ar_underflow               (),
-       .axi_r_injectsbiterr            (),
-       .axi_r_injectdbiterr            (),
-       .axi_ar_prog_full               (), // CR 724965 output port left with dummy assignment
-       .axi_ar_prog_empty              (), // CR 724965 output port left with dummy assignment
-       .axi_r_prog_full_thresh         (),
-       .axi_r_prog_empty_thresh        (),
-       .axi_r_data_count               (),
-       .axi_r_wr_data_count            (),
-       .axi_r_rd_data_count            (),
-       .axi_r_sbiterr                  (),
-       .axi_r_dbiterr                  (),
-       .axi_r_overflow                 (),
-       .axi_r_underflow                (),
-       .axis_injectsbiterr             (),
-       .axis_injectdbiterr             (),
-       .axi_r_prog_full                (), // CR 724965 output port left with dummy assignment
-       .axi_r_prog_empty               (), // CR 724965 output port left with dummy assignment
-       .axis_prog_full_thresh          (),
-       .axis_prog_empty_thresh         (),
-       .axis_data_count                (),
-       .axis_wr_data_count             (),
-       .axis_rd_data_count             (),
-       .axis_sbiterr                   (),
-       .axis_dbiterr                   (),
-       .axis_overflow                  (),
-       .axis_underflow                 (),
-       .axis_prog_full                 (), // CR 724965 output port left with dummy assignment
-       .axis_prog_empty                ()  // CR 724965 output port left with dummy assignment
   );
 
   // }}} -----------------------------------
@@ -28568,7 +28592,7 @@ module srio_gen2_v4_1_16_buf_tx_bram_bank
 
 
   // {{{ Block memory Instantiation --------
-  blk_mem_gen_v8_4_5                                          // blk_mem_gen_v8_0 values
+  blk_mem_gen_v8_4_4                                          // blk_mem_gen_v8_0 values
    #(
      .C_ADDRA_WIDTH                 (C_ADDR_LEN),           // (C_ADDR_LEN),          
      .C_ADDRB_WIDTH                 (C_ADDR_LEN),           // (C_ADDR_LEN),          
@@ -28656,7 +28680,7 @@ module srio_gen2_v4_1_16_buf_tx_bram_bank
      )                                                       
    blk_mem_inst
     (
-     .clka                          (phy_clk),
+     .clka                        (phy_clk),
      .dina                        (bram_data_in),
      .addra                       (BT_bram_waddr),
      .ena                         (1'b1),
@@ -28722,6 +28746,7 @@ module srio_gen2_v4_1_16_buf_tx_bram_bank
      .eccpipece                   (1'b0)
 
     );
+    
   // }}} ---------------------------------
 
 
@@ -28814,8 +28839,8 @@ module srio_gen2_v4_1_16_log_top #(
   parameter SINGLE_SEG_MBOX           = 16,          // Number of single segment mailboxes to support {0 - 64}
   parameter MAINT_SOURCE              = 1,           // If 1, core may source maint transactions {0, 1}
   parameter MAINT_CFG                 = 1,           // If 1, log maint block exists {0, 1}
-  parameter DEVID_CAR                 = 32'h00000000,// Reset value for Device Identity CAR {32�h00000000�32�hFFFFFFFF}
-  parameter DEVINFO_CAR               = 32'h00000000,// Reset value for Device Info CAR {32�h00000000�32�hFFFFFFFF}
+  parameter DEVID_CAR                 = 32'h00000000,// Reset value for Device Identity CAR {32�h00000000�?32�hFFFFFFFF}
+  parameter DEVINFO_CAR               = 32'h00000000,// Reset value for Device Info CAR {32�h00000000�?32�hFFFFFFFF}
   parameter DEV_CAR_OVRD              = 0,           // If 1, DEV*CAR param values used {0,1}
   parameter LCSBA_SUPPORT             = 1,           // If 1, indicates the LCSBA is used {0, 1}
   parameter LCSBA                     = 10'h3FF,     // Reset value for LCSBA register {0 - 10'h3FF}
@@ -36072,8 +36097,8 @@ module srio_gen2_v4_1_16_log_cfg_reg
     parameter MSG_SINK_SINGLE = 1,        // Core may sink single-segment message transactions {0,1}
     parameter MSG_SINK_MULTI  = 1,        // Core may sink multiple-segment message transactions {0,1}
     parameter CRF_SUPPORT     = 1,        // If set, the core supports use of the CRF flag {0,1}
-    parameter DEVID_CAR       = 32'h00000000, // Reset value for Device Identity CAR {32�h00000000�32�hFFFFFFFF}
-    parameter DEVINFO_CAR     = 32'h00000000, // Reset value for Device Info CAR {32�h00000000�32�hFFFFFFFF}
+    parameter DEVID_CAR       = 32'h00000000, // Reset value for Device Identity CAR {32�h00000000�?32�hFFFFFFFF}
+    parameter DEVINFO_CAR     = 32'h00000000, // Reset value for Device Info CAR {32�h00000000�?32�hFFFFFFFF}
     parameter DEV_CAR_OVRD    = 0,            // If 1, DEV*CAR param values used {0,1}
     parameter LCSBA_SUPPORT   = 1,        // If set, the LCSBA is used to reroute transactions to the maint port {0,1}
     parameter LCSBA           = 10'h3FF,  // Reset value for LCSBA register {10'h0-10'h3FF}
@@ -36657,8 +36682,8 @@ module srio_gen2_v4_1_16_log_cfg_top
       parameter MSG_SINK_SINGLE = 1,          // Core may sink single-segment message transactions {0,1}
       parameter MSG_SINK_MULTI  = 1,          // Core may sink multiple-segment message transactions {0,1}
       parameter CRF_SUPPORT     = 1,          // If set, the core supports use of the CRF flag {0,1}
-      parameter DEVID_CAR       = 32'h00000000,   // Reset value for Device Identity CAR {32�h00000000�32�hFFFFFFFF}
-      parameter DEVINFO_CAR     = 32'h00000000,   // Reset value for Device Info CAR {32�h00000000�32�hFFFFFFFF}
+      parameter DEVID_CAR       = 32'h00000000,   // Reset value for Device Identity CAR {32�h00000000�?32�hFFFFFFFF}
+      parameter DEVINFO_CAR     = 32'h00000000,   // Reset value for Device Info CAR {32�h00000000�?32�hFFFFFFFF}
       parameter DEV_CAR_OVRD    = 0,              // If 1, DEV*CAR param values used {0,1}
       parameter LCSBA_SUPPORT   = 1,          // If set, I/O transactions can be rerouted to the maint port {0,1}
       parameter LCSBA           = 10'h3FF,    // Reset value for LCSBA register {10'h0-10'h3FF}
