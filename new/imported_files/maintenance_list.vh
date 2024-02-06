@@ -47,7 +47,7 @@
 // THIS COPYRIGHT NOTICE AND DISCLAIMER MUST BE RETAINED AS
 // 	PART OF THIS FILE AT ALL TIMES.                                
 //-----------------------------------------------------------------------------
-
+/*
                                    // RSVD, LOCAL/REMTE, ADDRESS,    RD/WR, DATA,         DATA MASK
   localparam [63:0] MAINTENANCE0   = {2'b0, REMTE,       24'h000000, READ,  32'h0480000E, 4'hF};
   localparam [63:0] MAINTENANCE1   = {2'b0, LOCAL,       24'h000000, READ,  32'h0480000E, 4'hF};
@@ -73,6 +73,37 @@
   localparam [63:0] MAINTENANCE17  = {2'b0, LOCAL,       24'h000430, READ,  32'h00107FC8, 4'h0};
   localparam [63:0] MAINTENANCE18  = {2'b0, REMTE,       24'h000450, READ,  32'h00207FC8, 4'h0};
   localparam [63:0] MAINTENANCE19  = {2'b0, REMTE,       24'h000470, READ,  32'h00307FC8, 4'h0};
+*/
+//////////////////////////////////////////////////////////////////test use //////////////////////
+  localparam [63:0] MAINTENANCE0   = {64'h0};
+  localparam [63:0] MAINTENANCE1   = {64'h0};
+  localparam [63:0] MAINTENANCE2   = {64'h0};
+  localparam [63:0] MAINTENANCE3   = {64'h0};
+
+  localparam [63:0] MAINTENANCE4   = {64'h0};
+  localparam [63:0] MAINTENANCE5   = {64'h0};
+  localparam [63:0] MAINTENANCE6   = {64'h0};
+  localparam [63:0] MAINTENANCE7   = {64'h0};
+
+  localparam [63:0] MAINTENANCE8   = {64'h0};
+  localparam [63:0] MAINTENANCE9   = {64'h0};
+  localparam [63:0] MAINTENANCE10  = {64'h0};
+  localparam [63:0] MAINTENANCE11  = {64'h0};
+
+  localparam [63:0] MAINTENANCE12  = {64'h0};
+  localparam [63:0] MAINTENANCE13  = {64'h0};
+  localparam [63:0] MAINTENANCE14  = {64'h0};
+  localparam [63:0] MAINTENANCE15  = {64'h0};
+
+  localparam [63:0] MAINTENANCE16  = {64'h0};
+  localparam [63:0] MAINTENANCE17  = {64'h0};
+  localparam [63:0] MAINTENANCE18  = {64'h0};
+  localparam [63:0] MAINTENANCE19  = {64'h0};
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
 
   localparam [63:0] MAINTENANCE20  = {64'h0000000000000000};
   localparam [63:0] MAINTENANCE21  = {64'h0000000000000000};

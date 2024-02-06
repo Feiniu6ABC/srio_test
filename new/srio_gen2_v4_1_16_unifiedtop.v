@@ -4,7 +4,7 @@ module srio_gen2_v4_1_16_unifiedtop #(
 
     parameter COMPONENT_NAME            = ("srio_gen2_0"),
     parameter C_DEVICEID_WIDTH          = ( 8) ,
-    parameter C_DEVICEID                = ("00FF"),
+    parameter C_DEVICEID                = (16'h00FF),
     parameter C_INIT_NREAD              = ( 1) ,
     parameter C_INIT_NWRITE             = ( 1) ,
     parameter C_INIT_NWRITE_R           = ( 1) ,
@@ -466,6 +466,8 @@ module srio_gen2_v4_1_16_unifiedtop #(
 
     assign phy_debug = {pp_debug, pt_debug, pr_debug};
 
+    wire  [7:0] empty0;
+    wire  [7:0] empty1;
 
 
     srio_gen2_v4_1_16_log_top
@@ -526,7 +528,7 @@ module srio_gen2_v4_1_16_unifiedtop #(
     srio_gen2_v4_1_16_log_top_inst(
         .log_clk                (log_lcl_log_clk ),                 // LOG interface clock
         .log_rst                (log_rst         ),                // Reset for LOG clock Domain
-        .cfg_clk                (log_lcl_cfg_clk ),    // CFG Interface user clock
+        .cfg_clk                (log_lcl_cfg_clk ),       // CFG Interface user clock
         .cfg_rst                (log_lcl_cfg_rst ),      // Reset for CFG clk domain
         .maintr_rst             (s_axi_maintr_rst),              // Reset for maintr interface, on LOG clk domain
 
@@ -544,7 +546,7 @@ module srio_gen2_v4_1_16_unifiedtop #(
         .LA_rx_porta_tlast      (m_axis_iresp_tlast),       // Indicates last beat
         .LA_rx_porta_tdata      (m_axis_iresp_tdata),       // Resp Data Bus
         .LA_rx_porta_tkeep      (m_axis_iresp_tkeep),       // Resp Keep Bus
-        .LA_rx_porta_tuser      (m_axis_iresp_tuser),       // Resp User Bus
+        .LA_rx_porta_tuser      ({m_axis_iresp_tuser,empty0}),       // Resp User Bus
 
 
         .UG_tx_portb_tvalid     (s_axis_tresp_tvalid),      // Indicates Valid Input on the Request Channel
@@ -560,7 +562,7 @@ module srio_gen2_v4_1_16_unifiedtop #(
         .LA_rx_portb_tlast      (m_axis_treq_tlast),       // Indicates last beat
         .LA_rx_portb_tdata      (m_axis_treq_tdata),       // Resp Data Bus
         .LA_rx_portb_tkeep      (m_axis_treq_tkeep),       // Resp Keep Bus
-        .LA_rx_portb_tuser      (m_axis_treq_tuser),       // Resp User Bus
+        .LA_rx_portb_tuser      ({m_axis_treq_tuser,empty1}),       // Resp User Bus
 
         
         .UG_tx_portc_tvalid     (1'b0 ),      // Indicates Valid Input on the Request Channel
