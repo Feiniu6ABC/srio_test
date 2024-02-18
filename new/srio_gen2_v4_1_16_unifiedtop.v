@@ -533,68 +533,68 @@ module srio_gen2_v4_1_16_unifiedtop #(
         .maintr_rst             (s_axi_maintr_rst),              // Reset for maintr interface, on LOG clk domain
 
         
-        .UG_tx_porta_tvalid     (s_axis_ireq_tvalid),      // Indicates Valid Input on the Request Channel
-        .LA_tx_porta_tready     (s_axis_ireq_tready),      // Beat has been accepted
-        .UG_tx_porta_tlast      (s_axis_ireq_tlast),       // Indicates last beat
-        .UG_tx_porta_tdata      (s_axis_ireq_tdata),       // Req Data Bus
-        .UG_tx_porta_tkeep      (s_axis_ireq_tkeep),       // Req Keep Bus
-        .UG_tx_porta_tuser      ({8'b0, s_axis_ireq_tuser}),       // Req User Bus
+        .UG_tx_porta_tvalid     (1'b0 ),      // Indicates Valid Input on the Request Channel
+        .LA_tx_porta_tready     (     ),      // Beat has been accepted
+        .UG_tx_porta_tlast      (1'b0 ),       // Indicates last beat
+        .UG_tx_porta_tdata      (64'b0),       // Req Data Bus
+        .UG_tx_porta_tkeep      (8'b0 ),       // Req Keep Bus
+        .UG_tx_porta_tuser      (40'b0),       // Req User Bus
 
       
-        .LA_rx_porta_tvalid     (m_axis_iresp_tvalid),      // Indicates Valid Output on the Response Channel
-        .UG_rx_porta_tready     (m_axis_iresp_tready),      // Beat has been accepted
-        .LA_rx_porta_tlast      (m_axis_iresp_tlast),       // Indicates last beat
-        .LA_rx_porta_tdata      (m_axis_iresp_tdata),       // Resp Data Bus
-        .LA_rx_porta_tkeep      (m_axis_iresp_tkeep),       // Resp Keep Bus
-        .LA_rx_porta_tuser      ({m_axis_iresp_tuser,empty0}),       // Resp User Bus
+        .LA_rx_porta_tvalid     (),      // Indicates Valid Output on the Response Channel
+        .UG_rx_porta_tready     (1'b0),      // Beat has been accepted
+        .LA_rx_porta_tlast      (),       // Indicates last beat
+        .LA_rx_porta_tdata      (),       // Resp Data Bus
+        .LA_rx_porta_tkeep      (),       // Resp Keep Bus
+        .LA_rx_porta_tuser      (),       // Resp User Bus
 
 
-        .UG_tx_portb_tvalid     (s_axis_tresp_tvalid),      // Indicates Valid Input on the Request Channel
-        .LA_tx_portb_tready     (s_axis_tresp_tready),      // Beat has been accepted
-        .UG_tx_portb_tlast      (s_axis_tresp_tlast ),       // Indicates last beat
-        .UG_tx_portb_tdata      (s_axis_tresp_tdata ),       // Req Data Bus
-        .UG_tx_portb_tkeep      (s_axis_tresp_tkeep ),       // Req keep Bus
-        .UG_tx_portb_tuser      ({8'b0, s_axis_tresp_tuser}),       // Req User Bus
-
-        
-        .LA_rx_portb_tvalid     (m_axis_treq_tvalid),      // Indicates Valid Output on the Response Channel
-        .UG_rx_portb_tready     (m_axis_treq_tready),      // Beat has been accepted
-        .LA_rx_portb_tlast      (m_axis_treq_tlast),       // Indicates last beat
-        .LA_rx_portb_tdata      (m_axis_treq_tdata),       // Resp Data Bus
-        .LA_rx_portb_tkeep      (m_axis_treq_tkeep),       // Resp Keep Bus
-        .LA_rx_portb_tuser      ({m_axis_treq_tuser,empty1}),       // Resp User Bus
+        .UG_tx_portb_tvalid     (1'b0 ),      // Indicates Valid Input on the Request Channel
+        .LA_tx_portb_tready     (     ),      // Beat has been accepted
+        .UG_tx_portb_tlast      (1'b0  ),       // Indicates last beat
+        .UG_tx_portb_tdata      (64'b0 ),       // Req Data Bus
+        .UG_tx_portb_tkeep      (8'b0  ),       // Req keep Bus
+        .UG_tx_portb_tuser      (40'b0),       // Req User Bus
 
         
-        .UG_tx_portc_tvalid     (1'b0 ),      // Indicates Valid Input on the Request Channel
-        .LA_tx_portc_tready     (     ),      // Beat has been accepted
-        .UG_tx_portc_tlast      (1'b0 ),       // Indicates last beat
-        .UG_tx_portc_tdata      (64'b0),       // Req Data Bus
-        .UG_tx_portc_tkeep      (8'b0 ),       // Req Keep Bus
-        .UG_tx_portc_tuser      (40'b0),       // Req User Bus
+        .LA_rx_portb_tvalid     (),      // Indicates Valid Output on the Response Channel
+        .UG_rx_portb_tready     (1'b0),      // Beat has been accepted
+        .LA_rx_portb_tlast      (),       // Indicates last beat
+        .LA_rx_portb_tdata      (),       // Resp Data Bus
+        .LA_rx_portb_tkeep      (),       // Resp Keep Bus
+        .LA_rx_portb_tuser      (),       // Resp User Bus
 
         
-        .LA_rx_portc_tvalid     ( ),      // Indicates Valid Output on the Response Channel
-        .UG_rx_portc_tready     (1'b0),      // Beat has been accepted
-        .LA_rx_portc_tlast      ( ),       // Indicates last beat
-        .LA_rx_portc_tdata      ( ),       // Resp Data Bus
-        .LA_rx_portc_tkeep      ( ),       // Resp Keep Bus
-        .LA_rx_portc_tuser      ( ),       // Resp User Bus
+        .UG_tx_portc_tvalid     (s_axis_ireq_tvalid),      // Indicates Valid Input on the Request Channel
+        .LA_tx_portc_tready     (s_axis_ireq_tready),      // Beat has been accepted
+        .UG_tx_portc_tlast      (s_axis_ireq_tlast),       // Indicates last beat
+        .UG_tx_portc_tdata      (s_axis_ireq_tdata),       // Req Data Bus
+        .UG_tx_portc_tkeep      (s_axis_ireq_tkeep),       // Req Keep Bus
+        .UG_tx_portc_tuser      ({8'b0, s_axis_ireq_tuser}),       // Req User Bus
 
         
-        .UG_tx_portd_tvalid     (1'b0 ),      // Indicates Valid Input on the Request Channel
-        .LA_tx_portd_tready     (     ),      // Beat has been accepted
-        .UG_tx_portd_tlast      (1'b0 ),       // Indicates last beat
-        .UG_tx_portd_tdata      (64'b0),       // Req Data Bus
-        .UG_tx_portd_tkeep      (8'b0 ),       // Req Keep Bus
-        .UG_tx_portd_tuser      (40'b0),       // Req User Bus
+        .LA_rx_portc_tvalid     (m_axis_iresp_tvalid),      // Indicates Valid Output on the Response Channel
+        .UG_rx_portc_tready     (m_axis_iresp_tready),      // Beat has been accepted
+        .LA_rx_portc_tlast      (m_axis_iresp_tlast),       // Indicates last beat
+        .LA_rx_portc_tdata      (m_axis_iresp_tdata),       // Resp Data Bus
+        .LA_rx_portc_tkeep      (m_axis_iresp_tkeep),       // Resp Keep Bus
+        .LA_rx_portc_tuser      ({m_axis_iresp_tuser,empty0}),       // Resp User Bus
 
         
-        .LA_rx_portd_tvalid     ( ),      // Indicates Valid Output on the Response Channel
-        .UG_rx_portd_tready     (1'b0),      // Beat has been accepted
-        .LA_rx_portd_tlast      ( ),       // Indicates last beat
-        .LA_rx_portd_tdata      ( ),       // Resp Data Bus
-        .LA_rx_portd_tkeep      ( ),       // Resp Keep Bus
-        .LA_rx_portd_tuser      ( ),       // Resp User Bus
+        .UG_tx_portd_tvalid     (s_axis_tresp_tvalid),      // Indicates Valid Input on the Request Channel
+        .LA_tx_portd_tready     (s_axis_tresp_tready),      // Beat has been accepted
+        .UG_tx_portd_tlast      (s_axis_tresp_tlast),       // Indicates last beat
+        .UG_tx_portd_tdata      (s_axis_tresp_tdata),       // Req Data Bus
+        .UG_tx_portd_tkeep      (s_axis_tresp_tkeep),       // Req Keep Bus
+        .UG_tx_portd_tuser      ({8'b0, s_axis_tresp_tuser}),       // Req User Bus
+
+        
+        .LA_rx_portd_tvalid     (m_axis_treq_tvalid),      // Indicates Valid Output on the Response Channel
+        .UG_rx_portd_tready     (m_axis_treq_tready),      // Beat has been accepted
+        .LA_rx_portd_tlast      (m_axis_treq_tlast),       // Indicates last beat
+        .LA_rx_portd_tdata      (m_axis_treq_tdata),       // Resp Data Bus
+        .LA_rx_portd_tkeep      (m_axis_treq_tkeep),       // Resp Keep Bus
+        .LA_rx_portd_tuser      ({m_axis_treq_tuser,empty1}),       // Resp User Bus
 
         
         .UG_tx_porte_tvalid     (1'b0 ),      // Indicates Valid Input on the Request Channel
