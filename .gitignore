@@ -1,0 +1,5 @@
+*.simvision
+*.swap
+*.log
+**/xrun/
+**/worklib
