@@ -6,6 +6,8 @@ XRUN_TCL_PATH := ../run.tcl		## xrun tcl patch
 ################
 OPTION_XRUN := -64bit -incdir $(CURDIR)/imported_files -gui -sv -notimingcheck -access +rwc -accessreg +rwc -debug -uvmlinedebug -classlinedebug -plidebug -fsmdebug -uvmaccess -date -dumpstack -negdelay -timescale 1ns/100ps -lwdgen -f $(FILE_LIST_PATH) -input $(XRUN_TCL_PATH) -l xrun.log
 
+OPTION_XRUN_FAST := -64bit -incdir $(CURDIR)/imported_files -gui -sv -notimingcheck -access +rwc -accessreg +rwc -debug -uvmaccess -date -dumpstack -negdelay -timescale 1ns/100ps -lwdgen -f $(FILE_LIST_PATH) -input $(XRUN_TCL_PATH) -l xrun.log
+
 
 OPTION_VCS := -f $(FILE_LIST_PATH)	\
 	-timescale=1ns/1ps	\
@@ -23,7 +25,7 @@ sim	:
 ifeq ($(SIM),xrun)
 	@echo "SIM is $(SIM) and dubug support indago"	
 	@cd ./xrun && rm -rf *
-	@cd ./xrun && xrun $(OPTION_XRUN)
+	@cd ./xrun && xrun $(OPTION_XRUN_FAST)
 else
      ifeq ($(SIM),vcs)
 	@echo "SIM is $(SIM) and dubug support verdi"
