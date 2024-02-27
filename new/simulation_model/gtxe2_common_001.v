@@ -59,7 +59,6 @@ module GTXE2_COMMON_WRAP #(  // Verilog-2001
   input GSR
 );
 
-`pragma begin_decoded privkey="CDS_RSA_KEY", key_keyname="cds_rsa_key", key_keyowner="Cadence Design Systems."
 `ifdef _INTERNAL_TRUE_
 `undef _INTERNAL_TRUE_
 `endif
@@ -206,4 +205,3 @@ B_GTXE2_COMMON #(
   .GSR(GSR)
 );
 endmodule
-`pragma end_decoded

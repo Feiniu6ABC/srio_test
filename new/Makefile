@@ -4,7 +4,7 @@ FILE_LIST_PATH := ../filelist.f		## file path
 XRUN_TCL_PATH := ../run.tcl		## xrun tcl patch
 
 ################
-OPTION_XRUN := -64bit -incdir /home/autumn/Desktop/srio_test/new/imported_files -gui -sv -notimingcheck -access +rwc -accessreg +rwc -debug -uvmlinedebug -classlinedebug -plidebug -fsmdebug -uvmaccess -date -dumpstack -negdelay -timescale 1ns/100ps -lwdgen -f $(FILE_LIST_PATH) -input $(XRUN_TCL_PATH) -l xrun.log
+OPTION_XRUN := -64bit -incdir $(CURDIR)/imported_files -gui -sv -notimingcheck -access +rwc -accessreg +rwc -debug -uvmlinedebug -classlinedebug -plidebug -fsmdebug -uvmaccess -date -dumpstack -negdelay -timescale 1ns/100ps -lwdgen -f $(FILE_LIST_PATH) -input $(XRUN_TCL_PATH) -l xrun.log
 
 
 OPTION_VCS := -f $(FILE_LIST_PATH)	\
