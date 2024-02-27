@@ -33,4 +33,5 @@
 /home/autumn/Desktop/git_srio/srio_test/new/simulation_model/gtxe2_channel_001.v
 /home/autumn/Desktop/git_srio/srio_test/new/simulation_model/gtxe2_channel_002.v
 /home/autumn/Desktop/git_srio/srio_test/new/simulation_model/FD.v
+/home/autumn/Desktop/git_srio/srio_test/new/simulation_model/RAMB36SDP.v
 /home/autumn/Desktop/git_srio/srio_test/new/srio_gen2_v4_1_16_unifiedtop.v
