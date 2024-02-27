@@ -30,3 +30,5 @@
 /home/autumn/Desktop/git_srio/srio_test/new/simulation_model/IBUFDS_GTE2.v
 /home/autumn/Desktop/git_srio/srio_test/new/simulation_model/gtxe2_common_001.v
 /home/autumn/Desktop/git_srio/srio_test/new/simulation_model/gtxe2_common_002.v
+/home/autumn/Desktop/git_srio/srio_test/new/simulation_model/gtxe2_channel_001.v
+/home/autumn/Desktop/git_srio/srio_test/new/simulation_model/gtxe2_channel_002.v
